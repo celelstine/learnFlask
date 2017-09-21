@@ -1,0 +1,28 @@
+<table>
+    <tr valign="top">
+        <td rowspan="2">
+          <img src="{{ post.author.avatar(50) }}">
+        </td>
+        <td>
+          <!--we autoescape this block to disallow jinja from escaping html tags snce we place some in the nickname placeholder-->
+            {% autoescape false %}
+             <p>{{ _('%(nickname)s said %(when)s:', nickname = '<a href="%s">%s</a>' % (url_for('user', nickname= post.author.nickname), post.author.nickname), when=momentjs(post.timestamp).fromNow()) }}
+              {{_(post.body)}}
+             </p>
+             <hr />  
+            {% endautoescape %}
+        </td>
+        <td>
+          {% if post.language != None and post.language != '' and post.language != g.locale %}
+            <div>
+              <a href="#">{{ _('Translate') }}</a>
+              </div>
+          {% endif %}
+          {% if post.author.id == g.user.id %}
+            <p>
+              <a href="{{ url_for('deletePost', id=post.id) }}">{{ _('Delete Post') }}</a>
+            </p>
+          {% endif %}
+        </td>
+    </tr>
+</table>
